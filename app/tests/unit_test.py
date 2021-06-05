@@ -5,7 +5,7 @@ def mock_value():
     return 1
 
 def test_test1(mock_value):
-    assert mock_value == 0
+    assert mock_value == 1
 
 def test_test2():
     assert 'hello' == 'hello'
