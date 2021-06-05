@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return app.send_static_file('html/index.html')
+    return send_from_directory('html', 'index.html')
 
 if __name__ == "__main__": 
-    app.run()
+    app.run(debug=True)
