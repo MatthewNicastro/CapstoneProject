@@ -26,4 +26,4 @@ RUN apt-get update -qq \
 # echo 'alias pip="pip3.9"' >> ~/.bashrc
 # . ~/.bashrc
 # pip install --upgrade pip
-# pip install pytest
+# pip install pytest flask
