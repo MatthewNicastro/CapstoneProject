@@ -1,20 +1,40 @@
 pipeline{
     agent any
+    environment {
+        name = 'aetna-app'
+        dockerImage = ''
+    }
     stages{
+        stage("Build"){
+            step {
+                script {
+                    dockerImage = docker.build name + ":$BUILD_NUMBER"
+                }
+            }
+        }
         stage("Test"){
             steps{
-                sh "pytest app"
+                step{
+                    script {
+                        docker.image("${name}:$BUILD_NUMBER").inside {
+                            sh "pytest app"
+                        }
+                    }
+                }
             }
             post{
-                success{
+                success {
                     echo "========A executed successfully========"
+                }
+                failure {
+                    echo "========An execution error occured========"
                 }
             }
         }
     }
     post{
         always{
-            echo "========always========"
+            sh "docker rmi ${name}:$BUILD_NUMBER"
         }
     }
 }
