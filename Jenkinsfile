@@ -9,6 +9,7 @@ pipeline{
     }
     environment {
         name = 'matthewnicastro/pgpcapstoneproject'
+        tag = 'latest'
         dockerImage = ''
         deploy = false
         isContainerRunning = ''
@@ -18,14 +19,14 @@ pipeline{
         stage("Build Applicaiton Docker Image") {
             steps {
                 script {
-                    dockerImage = docker.build name + ":latest"
+                    dockerImage = docker.build name + ":${tag}"
                 }
             }
         }
         stage("Run Application Tests") {
             steps {
                 script {
-                    docker.image("${name}:$BUILD_NUMBER").inside {
+                    docker.image("${name}:${tag}").inside {
                         sh "pytest app"
                     }
                 }
@@ -75,7 +76,7 @@ pipeline{
             sh "docker image prune -f"
         }
         failure {
-            sh "docker rmi ${name}:$latest"
+            sh "docker rmi ${name}:${tag}"
         }
     }
 }
