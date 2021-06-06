@@ -65,13 +65,7 @@ pipeline{
             steps {
                 script {
                     sh ( script: '''
-                        if [ "$(docker ps -q -f name=${containerName})" ]; then
-                            docker container stop ${containerName}
-                        fi
-                        if [ "$(docker ps -aq -f status=exited -f name=${containerName})" ]; then
-                            # cleanup
-                            docker container rm ${containerName}
-                        fi
+                        docker container rm -f ${containerName} || true
                     ''' )
                     dockerImage.run(["-p 5000:5000 --name ${containerName}"])
                 }
