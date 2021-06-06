@@ -71,7 +71,11 @@ pipeline{
             }
         }
     }
-    post{
+    post {
+        success {
+            sh "docker rmi -f registry.hub.docker.com/matthewnicastro/pgpcapstoneproject:${tag}"
+            sh "docker rmi -f registry.hub.docker.com/matthewnicastro/pgpcapstoneproject:$BUILD_NUMBER"
+        }
         failure {
             sh "docker rmi ${name}:${tag}"
         }
