@@ -64,8 +64,7 @@ pipeline{
             }
             steps {
                 script {
-                    env.isContainerRunning = sh (script: "docker images -q ${containerName}", returnStdout: true )
-                    if( env.isConatinerRunning ){
+                    if( sh (script: "docker ps -a | grep ${containerName}", returnStdout: true ) ){
                         sh ( script: "docker container stop ${containerName}")
                         sh ( script: "docker container rm ${containerName}")
                     }
