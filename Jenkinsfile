@@ -6,7 +6,7 @@ pipeline{
     }
     stages{
         stage("Build"){
-            step {
+            steps {
                 script {
                     dockerImage = docker.build name + ":$BUILD_NUMBER"
                 }
@@ -14,11 +14,9 @@ pipeline{
         }
         stage("Test"){
             steps{
-                step{
-                    script {
-                        docker.image("${name}:$BUILD_NUMBER").inside {
-                            sh "pytest app"
-                        }
+                script {
+                    docker.image("${name}:$BUILD_NUMBER").inside {
+                        sh "pytest app"
                     }
                 }
             }
