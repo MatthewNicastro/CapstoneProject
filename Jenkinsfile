@@ -6,14 +6,14 @@ pipeline{
         deploy = false
     }
     stages{
-        stage("Build") {
+        stage("Build Applicaiton Docker Image") {
             steps {
                 script {
                     dockerImage = docker.build name + ":$BUILD_NUMBER"
                 }
             }
         }
-        stage("Test") {
+        stage("Run Application Tests") {
             steps {
                 script {
                     docker.image("${name}:$BUILD_NUMBER").inside {
@@ -32,7 +32,7 @@ pipeline{
                 }
             }
         }
-        stage("Deploy") {
+        stage("Push Docker Image to Dockerhub") {
             when {
                 expression {
                     return env.deploy
@@ -44,6 +44,18 @@ pipeline{
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push("latest")
                     }
+                }
+            }
+        }
+        stage("Deploy container") {
+            when {
+                expression {
+                    return env.deploy
+                }
+            }
+            steps {
+                script {
+                    dockerImage.run(["-p 5000:5000 --name aetna-app"])
                 }
             }
         }
