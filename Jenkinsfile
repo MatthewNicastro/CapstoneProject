@@ -1,5 +1,12 @@
 pipeline{
     agent any
+    parameters {
+        booleanParam(
+            defaultValue: true,
+            description: 'Push image to docker hub',
+            name: 'PUSH_CONTAINER'
+        )
+    }
     environment {
         name = 'matthewnicastro/pgpcapstoneproject'
         dockerImage = ''
@@ -35,7 +42,7 @@ pipeline{
         stage("Push Docker Image to Dockerhub") {
             when {
                 expression {
-                    return env.deploy
+                    return env.deploy && params.PUSH_CONTAINER
                 }
             }
             steps {
