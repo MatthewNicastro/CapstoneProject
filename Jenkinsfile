@@ -65,7 +65,7 @@ pipeline{
             steps {
                 script {
                     isContainerRunning = sh (
-                        script: "docker images -q ${containerName}"
+                        script: "docker images -q ${containerName}",
                         returnStdout: true
                     )
                     sh (script: "echo ${isContainerRunning}")
