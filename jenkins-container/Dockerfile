@@ -11,5 +11,3 @@ RUN add-apt-repository \
     stable"
 RUN apt-get update -qq \
     && apt-get install docker-ce=17.12.1~ce-0~debian -y
-
-# docker run -d -v jenkins:/var/jenkins_home --name jenkins -p 8080:8080 -p 50000:50000 jenkins-container:1.0
