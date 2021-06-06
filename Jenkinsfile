@@ -68,7 +68,7 @@ pipeline{
         }
     }
     post{
-        always{
+        failure {
             sh "docker rmi ${name}:$BUILD_NUMBER"
         }
     }
