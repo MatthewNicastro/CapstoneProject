@@ -56,14 +56,29 @@ pipeline{
                 }
             }
         }
-    }
-    post{
-        success {
-            script {
-                sh ( script: "(docker container stop ${containerName} || true) && (docker container rm ${containerName} || true)" )
-                dockerImage.run(["-p 5000:5000 --name ${containerName}"])
+        stage("Deploy container") {
+            when {
+                expression {
+                    return env.deploy
+                }
+            }
+            steps {
+                script {
+                    sh ( script: '''
+                        if [ "$(docker ps -q -f name=${containerName})" ]; then
+                            docker container stop ${containerName}
+                        fi
+                        if [ "$(docker ps -aq -f status=exited -f name=${containerName})" ]; then
+                            # cleanup
+                            docker container rm ${containerName}
+                        fi
+                    ''' )
+                    dockerImage.run(["-p 5000:5000 --name ${containerName}"])
+                }
             }
         }
+    }
+    post{
         failure {
             sh "docker rmi ${name}:$BUILD_NUMBER"
         }
