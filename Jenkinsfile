@@ -11,7 +11,6 @@ pipeline{
         name = 'matthewnicastro/pgpcapstoneproject'
         dockerImage = ''
         deploy = false
-        isContainerRunning = ''
         containerName = 'aetna-app'
     }
     stages{
@@ -64,16 +63,15 @@ pipeline{
             }
             steps {
                 script {
-                    isContainerRunning = sh (
-                        script: "docker images -q ${containerName}",
-                        returnStdout: true
-                    )
-                    sh (script: "echo ${isContainerRunning}")
+                    if( sh (script: "docker images -q ${containerName}", returnStdout: true )){
+                        sh( script: "docker container stop ${containerName}")
+                        sh( script: "docker container rm ${containerName}")
+                    }
+                    dockerImage.run(["-p 5000:5000 --name ${containerName}"])
                 }
             }
         }
     }
-    //dockerImage.run(["-p 5000:5000 --name ${containerName}"])
     post{
         failure {
             sh "docker rmi ${name}:$BUILD_NUMBER"
