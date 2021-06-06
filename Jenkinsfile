@@ -65,7 +65,7 @@ pipeline{
             steps {
                 script {
                     
-                    sh ( script: "docker ps -a | grep ${containerName} && docker container stop ${containerName} && ")
+                    sh ( script: "docker ps -a | grep ${containerName} && docker container stop ${containerName} && docker container rm ${containerName}")
                     dockerImage.run(["-p 5000:5000 --name ${containerName}"])
                 }
             }
