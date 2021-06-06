@@ -72,7 +72,7 @@ pipeline{
     }
     post{
         always {
-            sh "docker image prune"
+            sh "docker image prune -y"
         }
         failure {
             sh "docker rmi ${name}:$BUILD_NUMBER"
