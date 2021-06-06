@@ -39,7 +39,12 @@ pipeline{
                 }
             }
             steps {
-                sh "echo deploy"
+                script {
+                    docker.withRegistry("https://hub.docker.com/repository/docker/matthewnicastro/pgpcapstoneproject", "docker-hub") {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push("latest")
+                    }
+                }
             }
         }
     }
