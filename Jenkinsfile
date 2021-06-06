@@ -63,10 +63,13 @@ pipeline{
                 }
             }
             steps {
+                sh '''
+                        docker container rm -f ${containerName}
+                        if [$error] then 
+                            exit 0
+                        fi
+                    ''' 
                 script {
-                    sh ( script: '''
-                        docker container rm -f ${containerName} || true
-                    ''' )
                     dockerImage.run(["-p 5000:5000 --name ${containerName}"])
                 }
             }
