@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        name = 'aetna-app'
+        name = 'matthewnicastro/pgpcapstoneproject'
         dockerImage = ''
         deploy = false
     }
@@ -40,7 +40,7 @@ pipeline{
             }
             steps {
                 script {
-                    docker.withRegistry("https://hub.docker.com/repository/docker/matthewnicastro/pgpcapstoneproject", "docker-hub") {
+                    docker.withRegistry("https://hub.docker.com/", "docker-hub") {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push("latest")
                     }
