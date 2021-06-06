@@ -56,21 +56,14 @@ pipeline{
                 }
             }
         }
-        stage("Deploy container") {
-            when {
-                expression {
-                    return env.deploy
-                }
-            }
-            steps {
-                script {
-                    sh ( script: "docker ps -a | grep ${containerName} && (docker container stop ${containerName} || true) && (docker container rm ${containerName} || true)" )
-                    dockerImage.run(["-p 5000:5000 --name ${containerName}"])
-                }
-            }
-        }
     }
     post{
+        success {
+            script {
+                sh ( script: "docker ps -a | grep ${containerName} && (docker container stop ${containerName} || true) && (docker container rm ${containerName} || true)" )
+                dockerImage.run(["-p 5000:5000 --name ${containerName}"])
+            }
+        }
         failure {
             sh "docker rmi ${name}:$BUILD_NUMBER"
         }
