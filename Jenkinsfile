@@ -18,7 +18,7 @@ pipeline{
         stage("Build Applicaiton Docker Image") {
             steps {
                 script {
-                    dockerImage = docker.build name + ":$BUILD_NUMBER"
+                    dockerImage = docker.build name + ":latest"
                 }
             }
         }
@@ -75,7 +75,7 @@ pipeline{
             sh "docker image prune -f"
         }
         failure {
-            sh "docker rmi ${name}:$BUILD_NUMBER"
+            sh "docker rmi ${name}:$latest"
         }
     }
 }
