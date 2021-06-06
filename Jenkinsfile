@@ -71,7 +71,7 @@ pipeline{
         }
     }
     post{
-        always {
+        success {
             sh "docker image prune -f"
         }
         failure {
