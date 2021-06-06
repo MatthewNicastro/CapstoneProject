@@ -72,9 +72,6 @@ pipeline{
         }
     }
     post{
-        success {
-            sh "docker image prune -f"
-        }
         failure {
             sh "docker rmi ${name}:${tag}"
         }
